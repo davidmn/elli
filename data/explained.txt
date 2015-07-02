@@ -1,0 +1,4 @@
+elli/data contains
+- the test video
+- the frame data to be passed to PartsBasedDetector
+- feature data from the PartsBasedDetector
