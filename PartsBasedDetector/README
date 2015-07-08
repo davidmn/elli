@@ -2,6 +2,16 @@
 PartsBasedDetector
 -------------------------------------------------
 
+IMPORTANT
+---------
+This is this PartsBasedDetector from the for by IshitaTakeshi. That is available at:
+https://github.com/IshitaTakeshi/PartsBasedDetector
+
+I reccomend you download that and build it. The interesting stuff I have done is in:
+elli/PartsBasedDetector/src/PoseEstimator.cpp
+
+----------
+
 This project implements a Parts Based Detector in C++, described in the
 following paper:
 
