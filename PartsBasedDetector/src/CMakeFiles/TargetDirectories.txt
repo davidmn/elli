@@ -1,0 +1,3 @@
+/home/megaslippers/elli/PartsBasedDetector/src/src/CMakeFiles/PartsBasedDetector_bin.dir
+/home/megaslippers/elli/PartsBasedDetector/src/CMakeFiles/PartsBasedDetector_doc.dir
+/home/megaslippers/elli/PartsBasedDetector/src/src/CMakeFiles/PartsBasedDetector_lib.dir

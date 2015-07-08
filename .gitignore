@@ -1,2 +1,9 @@
 data/*.avi
 data/*.png
+*.mex
+*.mexa64
+*.pyc
+*.o
+data.txt
+PartsBasedDetector/doc
+PartsBasedDetector/build
