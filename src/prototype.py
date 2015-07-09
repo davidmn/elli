@@ -2,6 +2,7 @@ import cv2
 import numpy as np 
 import os
 import pylab as plt
+import pandas as pd
 
 
 # The paths of the files used in the detection section
@@ -51,7 +52,22 @@ featureVector = pose[:,4:]
 featureVector[:,0] = np.divide(featureVector[:,0],frameSize[1])
 featureVector[:,1] = np.divide(featureVector[:,1],frameSize[0])
 
+# center the data
+centeredVector = featureVector
+centeredVector[:,0] = centeredVector[:,0] - np.average(centeredVector[:,0])
+centeredVector[:,1] = centeredVector[:,1] - np.average(centeredVector[:,1])
+
 # show scatter
 plt.scatter(featureVector[:,0],featureVector[:,1])
-plt.axis([0,1,0,1])
-plt.show()
+plt.axis([-1,1,-1,1])
+#plt.show()
+
+# create a pandas panel to store data
+temp = np.zeros([9,2,2])
+temp[:,:,0] = centeredVector
+temp[:,:,1] = centeredVector
+p = pd.Panel(temp,items=xrange(0,9,1),major_axis=['x','y'],minor_axis=xrange(0,2,1))
+print p.loc[:,:,0].T
+tempdf = pd.DataFrame(centeredVector,index=p.items, columns=p.major_axis)
+p.ix[:,:,2] = tempdf.T
+print p.loc[:,:,2].T
