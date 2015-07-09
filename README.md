@@ -12,4 +12,7 @@ DEPENDENCIES
 
 TODO
 ----
+ - set up a pandas interface
+ - loop over videos
+ - store data in pandas
 
