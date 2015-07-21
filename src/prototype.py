@@ -3,6 +3,7 @@ import numpy as np
 import os
 import pylab as plt
 import pandas as pd
+import sys
 
 
 # The paths of the files used in the detection section
@@ -10,7 +11,7 @@ videoPath = '/home/megaslippers/elli/data/S2walking3A1.avi'
 modelPath = '/home/megaslippers/elli/PartsBasedDetector/models/Person_8parts.xml'
 framePath = '/home/megaslippers/elli/data/currentFrame.png'
 detectorPath ='/home/megaslippers/elli/PartsBasedDetector/src/src/PartsBasedDetector'
-inFilePath = '/home/megaslippers/elli/PartsBasedDetector/src/src/data.txt'
+inFilePath = '/home/megaslippers/elli/src/data.txt'
 
 # open the video stream, in this case we use video rather than a webcam stream
 videoStream = cv2.VideoCapture(videoPath)
@@ -23,10 +24,13 @@ frameSize = downsampledFrame.shape
 # produce a string that contains the paths to the PBD binary, model file and current frame then run PBD
 cv2.imwrite(framePath,downsampledFrame)
 command = detectorPath + ' ' + modelPath + ' ' + framePath
-#os.system(command)
+os.system(command)
 
 # open the data file and convert from floats to strings
 rawDataString = [line.rstrip('\n') for line in open(inFilePath)]
+if rawDataString[0] == "break":
+	sys.exit()
+
 floatData = []
 for element in rawDataString:
 	tempData = element.split(',')
@@ -71,3 +75,6 @@ print p.loc[:,:,0].T
 tempdf = pd.DataFrame(centeredVector,index=p.items, columns=p.major_axis)
 p.ix[:,:,2] = tempdf.T
 print p.loc[:,:,2].T
+
+p.ix[:,:,2].plot()
+print 'done'

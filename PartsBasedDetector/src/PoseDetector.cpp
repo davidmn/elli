@@ -141,7 +141,7 @@ int main(int argc, char** argv) {
 	}
 
 	else{
-		outFile << "error: no pose found\n";
+		outFile << "break";
 	}
 
 	outFile.close();
