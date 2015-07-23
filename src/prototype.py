@@ -61,10 +61,15 @@ centeredVector = featureVector
 centeredVector[:,0] = centeredVector[:,0] - np.average(centeredVector[:,0])
 centeredVector[:,1] = centeredVector[:,1] - np.average(centeredVector[:,1])
 
+A = featureVector[:,1]
+A = A[::-1]
+featureVector[:,1] = 1 - featureVector[:,1]
+print featureVector
+
 # show scatter
 plt.scatter(featureVector[:,0],featureVector[:,1])
-plt.axis([-1,1,-1,1])
-#plt.show()
+#plt.axis([-1,1,-1,1])
+plt.show()
 
 # create a pandas panel to store data
 temp = np.zeros([9,2,2])
@@ -76,5 +81,3 @@ tempdf = pd.DataFrame(centeredVector,index=p.items, columns=p.major_axis)
 p.ix[:,:,2] = tempdf.T
 print p.loc[:,:,2].T
 
-p.ix[:,:,2].plot()
-print 'done'

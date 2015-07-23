@@ -4,6 +4,14 @@ import os
 import pylab as plt
 import pandas as pd
 
+#upright position is True
+#sitting position is False
+mode = True
+
+if mode:
+	exportPanel = pd.read_pickle('upright.pkl')
+else:
+	exportPanel = pd.read_pickle('sitting.pkl')
 
 # The paths of the files used in the detection section
 videoPath = '/home/megaslippers/elli/data/S2walking3A1.avi'
@@ -15,8 +23,13 @@ inFilePath = '/home/megaslippers/elli/src/data.txt'
 # open the video stream, in this case we use video rather than a webcam stream
 videoStream = cv2.VideoCapture(videoPath)
 
-i = 0
+#initialise the pandas array
+
+i = 1
+frameNumber = 0
 while True:
+	frameNumber = frameNumber+1
+	print frameNumber
 	# sample the video, taking a frame and downsampling for use in the detector
 	ret,frame = videoStream.read()
 	if frame == None:
@@ -33,6 +46,7 @@ while True:
 	# open the data file and convert from floats to strings
 	rawDataString = [line.rstrip('\n') for line in open(inFilePath)]
 	if rawDataString[0] == "break": #checking for null pose
+		print "no pose"
 		continue
 
 	floatData = []
@@ -72,11 +86,18 @@ while True:
 
 	# create a pandas panel to store data
 	temp = np.zeros([9,2,2])
-	temp[:,:,0] = centeredVector
-	temp[:,:,1] = centeredVector
-	p = pd.Panel(temp,items=xrange(0,9,1),major_axis=['x','y'],minor_axis=xrange(0,2,1))
-	print p.loc[:,:,0].T
-	tempdf = pd.DataFrame(centeredVector,index=p.items, columns=p.major_axis)
-	p.ix[:,:,2] = tempdf.T
-	print p.loc[:,:,2].T
-	
+	temp[:,:,0] = featureVector
+	temp[:,:,1] = featureVector
+	exportPanel = pd.Panel(temp,items=xrange(0,9,1),major_axis=['x','y'],minor_axis=xrange(0,2,1))
+	#print p.loc[:,:,0].T
+	tempdf = pd.DataFrame(featureVector,index=exportPanel.items, columns=exportPanel.major_axis)
+	exportPanel.ix[:,:,2] = tempdf.T
+	#print p.loc[:,:,2].T
+	i = i+1
+
+if mode:
+	exportPanel.to_pickle('upright.pkl') 
+else:
+	exportPanel.to_pickle('sitting.pkl')
+
+print j
