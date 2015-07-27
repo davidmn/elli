@@ -3,33 +3,37 @@ import numpy as np
 import os
 import pylab as plt
 import pandas as pd
+import glob
+
+#sort out paths
+rootPath = os.path.abspath("..")
+print rootPath
+
+# The paths of the files used in the detection section
+videoPath = rootPath+'/data/S2walking3A1.avi'
+print videoPath
+modelPath = rootPath+'/PartsBasedDetector/models/Person_8parts.xml'
+framePath = rootPath+'/data/currentFrame.png'
+detectorPath = rootPath+'/PartsBasedDetector/src/src/PartsBasedDetector'
+inFilePath = rootPath+'/src/data.txt'
 
 #upright position is True
 #sitting position is False
 mode = True
 
+#open the relevant pandas panels
 if mode:
-	exportPanel = pd.read_pickle('upright.pkl')
+	exportPanel = pd.read_pickle(rootPath+'/data/upright.pkl')
 else:
-	exportPanel = pd.read_pickle('sitting.pkl')
-
-# The paths of the files used in the detection section
-videoPath = '/home/megaslippers/elli/data/S2walking3A1.avi'
-modelPath = '/home/megaslippers/elli/PartsBasedDetector/models/Person_8parts.xml'
-framePath = '/home/megaslippers/elli/data/currentFrame.png'
-detectorPath ='/home/megaslippers/elli/PartsBasedDetector/src/src/PartsBasedDetector'
-inFilePath = '/home/megaslippers/elli/src/data.txt'
+	exportPanel = pd.read_pickle(rootPath+'/data/sitting.pkl')
 
 # open the video stream, in this case we use video rather than a webcam stream
 videoStream = cv2.VideoCapture(videoPath)
 
-#initialise the pandas array
+#get the list of target videos
 
-i = 1
-frameNumber = 0
+
 while True:
-	frameNumber = frameNumber+1
-	print frameNumber
 	# sample the video, taking a frame and downsampling for use in the detector
 	ret,frame = videoStream.read()
 	if frame == None:
@@ -93,11 +97,9 @@ while True:
 	tempdf = pd.DataFrame(featureVector,index=exportPanel.items, columns=exportPanel.major_axis)
 	exportPanel.ix[:,:,2] = tempdf.T
 	#print p.loc[:,:,2].T
-	i = i+1
 
 if mode:
-	exportPanel.to_pickle('upright.pkl') 
+	exportPanel.to_pickle(rootPath+'/data/upright.pkl') 
 else:
-	exportPanel.to_pickle('sitting.pkl')
+	exportPanel.to_pickle(rootPath+'/data/sitting.pkl')
 
-print j

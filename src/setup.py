@@ -1,5 +1,8 @@
 import pandas as pd
 import numpy as np
+import os
+
+path = os.path.abspath("..") + "/data/"
 
 #create two panels
 upright = pd.Panel()
@@ -9,8 +12,9 @@ sitting = pd.Panel()
 temp = np.zeros([9,2,1])
 upright = pd.Panel(temp,items=xrange(0,9,1),major_axis=['x','y'],minor_axis=xrange(0,1,1))
 sitting = pd.Panel(temp,items=xrange(0,9,1),major_axis=['x','y'],minor_axis=xrange(0,1,1))
-print temp.shape
 
 #save them to files
-upright.to_pickle('upright.pkl')
-sitting.to_pickle('sitting.pkl')
+upright.to_pickle(path+'upright.pkl')
+sitting.to_pickle(path+'sitting.pkl')
+
+print "done"

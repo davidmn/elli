@@ -7,3 +7,4 @@ data/*.png
 data.txt
 PartsBasedDetector/doc
 PartsBasedDetector/build
+*.pkl
