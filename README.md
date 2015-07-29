@@ -12,6 +12,4 @@ DEPENDENCIES
 
 TODO
 ----
- - loop over videos
- - store data in pandas
-
+ - training networks

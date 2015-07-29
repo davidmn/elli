@@ -27,11 +27,12 @@ else:
 
 
 #get the list of target videos
-videos = glob.glob(rootPath+"/data/*.avi")
-print videos
+videos = glob.glob(rootPath+"/data/walking/*.avi")
 
+index = 0
 #loop over all videos in the directory
 for video in videos:
+	print video
 	# open the video stream, in this case we use video rather than a webcam stream
 	videoStream = cv2.VideoCapture(video)
 	while True:
@@ -80,24 +81,19 @@ for video in videos:
 		featureVector[:,1] = np.divide(featureVector[:,1],frameSize[0])
 
 		# center the data
-		centeredVector = featureVector
-		centeredVector[:,0] = centeredVector[:,0] - np.average(centeredVector[:,0])
-		centeredVector[:,1] = centeredVector[:,1] - np.average(centeredVector[:,1])
+		#centeredVector = featureVector
+		#centeredVector[:,0] = centeredVector[:,0] - np.average(centeredVector[:,0])
+		#centeredVector[:,1] = centeredVector[:,1] - np.average(centeredVector[:,1])
 
-		# show scatter
-		plt.scatter(featureVector[:,0],featureVector[:,1])
-		plt.axis([-1,1,-1,1])
-		#plt.show()
 
 		# create a pandas panel to store data
 		temp = np.zeros([9,2,2])
 		temp[:,:,0] = featureVector
 		temp[:,:,1] = featureVector
-		exportPanel = pd.Panel(temp,items=xrange(0,9,1),major_axis=['x','y'],minor_axis=xrange(0,2,1))
-		#print p.loc[:,:,0].T
 		tempdf = pd.DataFrame(featureVector,index=exportPanel.items, columns=exportPanel.major_axis)
-		exportPanel.ix[:,:,2] = tempdf.T
-		#print p.loc[:,:,2].T
+		exportPanel.ix[:,:,index] = tempdf.T
+		print exportPanel
+		index = index + 1
 
 	if mode:
 		exportPanel.to_pickle(rootPath+'/data/upright.pkl') 
