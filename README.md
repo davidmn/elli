@@ -13,3 +13,4 @@ DEPENDENCIES
 TODO
 ----
  - training networks
+ - update the setup to reflect changes to the data storage

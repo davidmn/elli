@@ -8,3 +8,5 @@ data.txt
 PartsBasedDetector/doc
 PartsBasedDetector/build
 *.pkl
+*.dat
+

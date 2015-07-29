@@ -5,32 +5,30 @@ import pylab as plt
 import pandas as pd
 import glob
 
-#sort out paths
+# work out where the script is being run for
 rootPath = os.path.abspath("..")
-print rootPath
 
-# The paths of the files used in the detection section
+# work out the relative paths for the detector to use
 modelPath = rootPath+'/PartsBasedDetector/models/Person_8parts.xml'
 framePath = rootPath+'/data/currentFrame.png'
 detectorPath = rootPath+'/PartsBasedDetector/src/src/PartsBasedDetector'
 inFilePath = rootPath+'/src/data.txt'
 
-#upright position is True
-#sitting position is False
-mode = True
+# upright position is True
+# sitting position is False
+mode = False
 
-#open the relevant pandas panels
+# get the list of target videos depending on the mode
 if mode:
-	exportPanel = pd.read_pickle(rootPath+'/data/upright.pkl')
+	videos = glob.glob(rootPath+"/data/walking/*.avi")
 else:
-	exportPanel = pd.read_pickle(rootPath+'/data/sitting.pkl')
+	videos = glob.glob(rootPath+"/data/sitting/*.avi")
 
-
-#get the list of target videos
-videos = glob.glob(rootPath+"/data/walking/*.avi")
-
+# pre allocate the pose array to make life easier and faster
+poseArray = np.zeros([9,2,30000])
 index = 0
-#loop over all videos in the directory
+
+# loop over all videos in the directory
 for video in videos:
 	print video
 	# open the video stream, in this case we use video rather than a webcam stream
@@ -65,38 +63,36 @@ for video in videos:
 			floatData.append(tempFloats)
 
 		# convert to numpy array with two columns free for rectangle centres
+		# doing it this way so centres can be calculated in two lines
 		pose = np.zeros([len(floatData),6], dtype=float)
 		for i in xrange(0,pose.shape[0]):
 			for j in xrange(0,pose.shape[1]-2):
 				pose[i,j] = floatData[i][j]
 			
 
-		# calculate the centers and split into feature vector
+		# calculate the centers of the rectangles
 		pose[:,4] = pose[:,0] + np.divide(pose[:,2], 2)
 		pose[:,5] = pose[:,1] + np.divide(pose[:,3], 2)
-		featureVector = pose[:,4:]
 
-		#normalise the feature vector
+		# this is the feature vector in image space
+		featureVector = np.zeros([9,2])
+		featureVector[:,:] = pose[:,4:]
+
+		# normalise the feature vector (feature vector in unit space)
 		featureVector[:,0] = np.divide(featureVector[:,0],frameSize[1])
 		featureVector[:,1] = np.divide(featureVector[:,1],frameSize[0])
 
-		# center the data
-		#centeredVector = featureVector
-		#centeredVector[:,0] = centeredVector[:,0] - np.average(centeredVector[:,0])
-		#centeredVector[:,1] = centeredVector[:,1] - np.average(centeredVector[:,1])
-
-
-		# create a pandas panel to store data
-		temp = np.zeros([9,2,2])
-		temp[:,:,0] = featureVector
-		temp[:,:,1] = featureVector
-		tempdf = pd.DataFrame(featureVector,index=exportPanel.items, columns=exportPanel.major_axis)
-		exportPanel.ix[:,:,index] = tempdf.T
-		print exportPanel
+		# put the feature vector in the array
+		poseArray[:,:,index] = featureVector
 		index = index + 1
 
-	if mode:
-		exportPanel.to_pickle(rootPath+'/data/upright.pkl') 
-	else:
-		exportPanel.to_pickle(rootPath+'/data/sitting.pkl')
+
+if mode:
+	outFile = open(rootPath+"/data/upright.dat","w")
+else:
+	outFile = open(rootPath+"/data/sitting.dat","w")
+
+# the most important step, save the data to a file and exit gracefully
+np.save(outFile,poseArray)
+outFile.close()
 
