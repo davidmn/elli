@@ -1,5 +1,6 @@
-data/*.avi
 data/*.png
+data/sitting/
+data/walking/
 *.mex
 *.mexa64
 *.pyc
