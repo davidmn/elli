@@ -5,7 +5,6 @@ import cv2
 import numpy as np 
 import os
 import pylab as plt
-import pandas as pd
 import glob
 
 # work out where the script is being run for
