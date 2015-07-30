@@ -9,7 +9,7 @@ def cleanUp(inArray):
 			tempFeature = inArray[:,:,i]
 			outArray = np.dstack([outArray,tempFeature])
 	
-	return outArray		
+	return outArray[:,:,1:]		
 
 rootPath = os.path.abspath("..")
 
