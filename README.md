@@ -8,9 +8,11 @@ elli is developed on an Ubuntu 14.04.2 LTS machine and is not tested on any othe
 DEPENDENCIES
 ------------
 - OpenCV 2.4.8
+- python 2.7.6
+- numpy
+- pybrain
 
 
 TODO
 ----
  - training networks
- - update the setup to reflect changes to the data storage
