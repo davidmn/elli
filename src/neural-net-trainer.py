@@ -47,8 +47,6 @@ def centrePose(array):
 
 rootPath = os.path.abspath("..")
 
-network = buildNetwork(18,100,1)
-
 sittingData = loadData(rootPath+"/data/clean-sitting.dat")
 uprightData = loadData(rootPath+"/data/clean-upright.dat")
 
@@ -66,14 +64,18 @@ for i in xrange(uprightData.shape[2]):
 	dataSet.addSample((uprightData[:,:,i].flatten()),(1,))
 
 testSet, trainingSet = dataSet.splitWithProportion(0.25)
+testSet.saveToFile(rootPath+"/data/testSet")
 
-trainer = BackpropTrainer(network,dataset=trainingSet, momentum=0.1, verbose=True, weightdecay=0.01)
 
-trainer.trainEpochs(1)
+for i in xrange(1,18):
+	print "training network with " + str(i) + " neurons"
+	network = buildNetwork(18,i,1)
+	trainer = BackpropTrainer(network,dataset=trainingSet, momentum=0.1, verbose=True, weightdecay=0.01)
+	trainer.trainUntilConvergence(dataset=None,maxEpochs = 20,verbose = True, continueEpochs=5,validationProportion=0.25)
 
-# save the network
-networkOutFile = open(rootPath+"/networks/network.pkl","w")
-pickle.dump(network, networkOutFile)
-networkOutFile.close()
+	# save the network
+	networkOutFile = open(rootPath+"/networks/network"+str(i)+".pkl","w")
+	pickle.dump(network, networkOutFile)
+	networkOutFile.close()
 
 print "done"
