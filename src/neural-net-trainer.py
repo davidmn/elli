@@ -65,13 +65,14 @@ for i in xrange(uprightData.shape[2]):
 
 testSet, trainingSet = dataSet.splitWithProportion(0.25)
 testSet.saveToFile(rootPath+"/data/testSet")
+trainingSet.saveToFile(rootPath+"/data/trainingSet")
 
 
-for i in xrange(1,18):
+for i in xrange(2,19):
 	print "training network with " + str(i) + " neurons"
 	network = buildNetwork(18,i,1)
 	trainer = BackpropTrainer(network,dataset=trainingSet, momentum=0.1, verbose=True, weightdecay=0.01)
-	trainer.trainUntilConvergence(dataset=None,maxEpochs = 20,verbose = True, continueEpochs=5,validationProportion=0.25)
+	trainer.trainEpochs(40)
 
 	# save the network
 	networkOutFile = open(rootPath+"/networks/network"+str(i)+".pkl","w")
