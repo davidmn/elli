@@ -11,4 +11,6 @@ PartsBasedDetector/doc
 PartsBasedDetector/build
 *.pkl
 *.dat
+data/trainingSet
+reports/
 
