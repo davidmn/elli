@@ -1,3 +1,6 @@
+# File: neural-net-testing.py
+# Author: David Megins-Nicholas
+
 import os
 import pybrain as pb
 import numpy as np

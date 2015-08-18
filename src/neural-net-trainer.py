@@ -1,3 +1,6 @@
+# File: neural-net-trainer.py
+# Author: David Megins-Nicholas
+
 import os
 import pybrain as pb
 import numpy as np
@@ -72,7 +75,7 @@ for i in xrange(2,19):
 	print "training network with " + str(i) + " neurons"
 	network = buildNetwork(18,i,1)
 	trainer = BackpropTrainer(network,dataset=trainingSet, momentum=0.1, verbose=True, weightdecay=0.01)
-	trainer.trainEpochs(40)
+	trainer.trainUntilConvergence(dataset=None,maxEpochs = 40,verbose = True, continueEpochs=5,validationProportion=0.25)
 
 	# save the network
 	networkOutFile = open(rootPath+"/networks/network"+str(i)+".pkl","w")

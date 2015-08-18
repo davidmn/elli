@@ -1,6 +1,5 @@
 # File: import-features.py
 # Author: David Megins-Nicholas
-# Created: 2015/07/30
 
 import os
 import numpy as np

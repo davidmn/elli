@@ -1,3 +1,6 @@
+# File: import-features.py
+# Author: David Megins-Nicholas
+
 import cv2
 import numpy as np 
 import os

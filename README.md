@@ -15,4 +15,3 @@ DEPENDENCIES
 
 TODO
 ----
- - training networks

@@ -32,10 +32,12 @@ index = 0
 # loop over all videos in the directory
 for video in videos:
 	print video
-	# open the video stream, in this case we use video rather than a webcam stream
+	# open the video stream, in this case we use video rather
+	# than a webcam stream
 	videoStream = cv2.VideoCapture(video)
 	while True:
-		# sample the video, taking a frame and downsampling for use in the detector
+		# sample the video, taking a frame and
+		# downsampling for use in the detector
 		ret,frame = videoStream.read()
 		if frame == None:
 			break
@@ -43,7 +45,8 @@ for video in videos:
 		downsampledFrame = cv2.resize(frame, (0,0), fx=0.25, fy=0.25) 
 		frameSize = downsampledFrame.shape
 
-		# produce a string that contains the paths to the PBD binary, model file and current frame then run PBD
+		# produce a string that contains the paths to the PBD binary,
+		# model file and current frame then run PBD
 		cv2.imwrite(framePath,downsampledFrame)
 		command = detectorPath + ' ' + modelPath + ' ' + framePath
 		os.system(command)
@@ -63,7 +66,7 @@ for video in videos:
 
 			floatData.append(tempFloats)
 
-		# convert to numpy array with two columns free for rectangle centres
+		# convert to numpy array with two columns free for rectangle centres.
 		# doing it this way so centres can be calculated in two lines
 		pose = np.zeros([len(floatData),6], dtype=float)
 		for i in xrange(0,pose.shape[0]):
