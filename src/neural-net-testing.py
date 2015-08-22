@@ -20,22 +20,25 @@ testSetFile = open(rootPath+"/data/trainingSet","r")
 testSet = pickle.load(testSetFile)
 testSetFile.close()
 print "dataset loaded"
-
+# initialise lists for sorting roc integration values and accuracy values
 areaDetails = []
-networkCounter = 2
 accDetails = []
-for networkInstance in networks:
+for thing in networks:
+	print thing[33:-4]
+for  networkInstance in networks:
 	#load neural network
 	networkFile = open(networkInstance,'r')
+	print "using network " + str(int(str((networkInstance)[40:-4])))
 	network = pickle.load(networkFile)
 	networkFile.close()
 	print "network loaded"
 	
-	#validate
+	# activate the network on the data set
 	results = []
 	for element in testSet:
 		results.append([float(network.activate(element[0])),int(element[1])])
 	
+	# sort data into approriot sets
 	sittingSet = []
 	standingSet = []
 	
@@ -48,11 +51,13 @@ for networkInstance in networks:
 	print np.mean(sittingSet)
 	print np.mean(standingSet)
 	
+	# the threshold for the output of the network
 	threshold = 0.0
 	
-	sittingROC = np.zeros([3,len(results)])
-	standingROC = np.zeros([3,len(results)])
+	# these store the data for the roc
+	sittingROC = np.zeros([2,1000])
 	
+	# identify TPs and FPs for ROC plot
 	counter = 0
 	tempAcc = []
 	while threshold < 1.0:
@@ -62,56 +67,33 @@ for networkInstance in networks:
 		standingIncorrect = 0
 		for element in results:
 			#true positive
-			if (element[0] > threshold) & (element[1] == 0):
+			if (element[0] < threshold) & (element[1] == 0):
 				sittingCorrect = sittingCorrect + 1
 			# false positive
-			if (element[0] > threshold) & (element[1] == 1):
-				sittingIncorrect = sittingIncorrect + 1
-			# true positive
 			if (element[0] < threshold) & (element[1] == 1):
-				standingCorrect = standingCorrect + 1
-			# false positive
-			if (element[0] < threshold) & (element[1] == 0):
-				standingIncorrect = standingIncorrect + 1
+				sittingIncorrect = sittingIncorrect + 1
 
-	
-	
-		threshold = threshold + 0.01
-		tempAcc.append(1.0-float(sittingCorrect + standingCorrect)/float(len(results)))
+		threshold = threshold + 0.001
+		#tempAcc.append(1.0-float(sittingCorrect + standingCorrect)/float(len(results)))
 		#false positives
 		sittingROC[0,counter] = float(sittingCorrect)/float(len(sittingSet))
 		#true positives
 		sittingROC[1,counter] = float(sittingIncorrect)/float(len(standingSet))
-		sittingROC[2,counter] = threshold
-
-		standingROC[0,counter] = float(standingCorrect)/float(len(standingSet))
-
-		sittingROC[1,counter] = float(standingIncorrect)/float(len(sittingSet))
-
-		sittingROC[2,counter] = threshold
 
 		counter = counter + 1
-	#plt.plot(sittingROC[0,0:100],sittingROC[1,0:100])
-	#plt.show()
-	accDetails.append([networkCounter, max(tempAcc)])
-	sittingFile = open(rootPath+"/data/"+"sittingROC"+str(networkCounter)+"sittingROC.pkl","w")
-	standingFile = open(rootPath+"/data/"+"standingROC"+str(networkCounter)+"standingROC.pkl","w")
+
+	# output the details
+	#accDetails.append([int(str(networkInstance)[40:-4]), max(tempAcc)])
+	sittingFile = open(rootPath+"/data/sittingstandingROC/"+str(networkInstance[40:-4])+"sittingROC.pkl","w")
 	pickle.dump(sittingROC,sittingFile)
-	pickle.dump(standingROC,standingFile)
-	areaDetails.append([networkInstance,np.trapz(sittingROC[1,0:100]),np.trapz(standingROC[1,0:100])])
+	areaDetails.append([int(str(networkInstance)[40:-4]),np.trapz(sittingROC[1,0:100])])
 	sittingFile.close()
-	standingFile.close()
-	networkCounter = networkCounter + 1
 
-areaFile = open(rootPath+"/data/area.pkl","w")
-pickle.dump(areaDetails,areaFile)
-areaFile.close()
-accFile = open(rootPath+"/data/acc.pkl","w")
-pickle.dump(accDetails,accFile)
-accFile.close()
+# save the larger loop details
+#areaFile = open(rootPath+"/data/area_test.pkl","w")
+#pickle.dump(areaDetails,areaFile)
+#areaFile.close()
+#accFile = open(rootPath+"/data/acc.pkl","w")
+#pickle.dump(accDetails,accFile)
+#accFile.close()
 
-for element in areaDetails:
-	print element
-
-for element in accDetails:
-	print element

@@ -43,6 +43,3 @@ np.save(uprightOut,cleanUpright)
 
 sittingOut.close()
 uprightOut.close()
-
-print "Sitting from " + str(dirtySitting.shape) + " to " + str(cleanSitting.shape)
-print "Upright from " + str(dirtyUpright.shape) + " to " + str(cleanUpright.shape)

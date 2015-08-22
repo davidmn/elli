@@ -66,7 +66,8 @@ int main(int argc, char** argv) {
 	
 	// check arguments
 	if (argc != 3 && argc != 4) {
-		printf("Usage: PartsBasedDetector model_file image_file [depth_file]\n");
+		printf("Usage: PartsBasedDetector model_file 
+			image_file [depth_file]\n");
 		exit(-1);
 	}
 

@@ -23,11 +23,13 @@ mode = False
 if mode:
 	videos = glob.glob(rootPath+"/data/walking/*.avi")
 else:
-	videos = glob.glob(rootPath+"/data/sitting/*.avi")
+	videos = glob.glob(rootPath+"/data/standing/*.avi")
 
 # pre allocate the pose array to make life easier and faster
 poseArray = np.zeros([9,2,30000])
 index = 0
+
+videos = [rootPath+'/data/standing/S1pourWaterA1.avi']
 
 # loop over all videos in the directory
 for video in videos:
@@ -92,9 +94,9 @@ for video in videos:
 
 
 if mode:
-	outFile = open(rootPath+"/data/upright.dat","w")
+	outFile = open(rootPath+"/data/walking.dat","w")
 else:
-	outFile = open(rootPath+"/data/sitting.dat","w")
+	outFile = open(rootPath+"/data/standing.dat","w")
 
 # the most important step, save the data to a file and exit gracefully
 np.save(outFile,poseArray)
